@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Form, redirect, useActionData } from "@remix-run/react";
-
+import { Form,  useActionData } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,6 +21,7 @@ export default function Index() {
       <h1>LOGIN PAGE</h1>
       <Form
         method="post"
+        
         className="border-2 border-white w-1/3 p-8 rounded flex flex-col justify-left items-left"
       >
         {actionData?.message && (
@@ -65,52 +66,32 @@ export default function Index() {
     The request property is of type Request.
  */
 
-export async function action({ request }: { request: Request }) {
-  const formData = await request.formData();
-  // console.log("Form Entries:", Array.from(formData.entries()));
-
-  // Convert FormData to an object
-  const userData = Object.fromEntries(formData);
-
-  // Debugging logs, outputs in Terminal not in Browser since it is SERVER SIDE Logs
-  // console.log("FormData:", formData);
-  // console.log("UserData:", userData);
-
-  //Adding data to Firebase
-  try {
-    const inputUserName = userData.username;
-    const inputPassword = userData.password;
-    // const docRef =  await addDoc(collection(db, 'users'), {
-    //   userName : userData.username,
-    //   password : userData.password,
-    // });
-    // console.log("Document written with ID: ", docRef.id);
-
-    // const docUserRef = doc(db, "users", "1");
-    // let userNameFromFB;
-    // let passWordFromFB;
-
-    // getDoc(docUserRef).then((doc) =>{
-    //   if(doc.exists()){
-    //      userNameFromFB = doc.data().username;
-    //      passWordFromFB = doc.data().password;
-    //   }
-    //   else{
-    //     console.log("No user found");
-    //   }
-    // })
-
-    if (inputUserName === "ipgautomotive" && inputPassword === "carmaker") {
-      console.log("Sucesss, its him");
-      return redirect("/weather");
-    } else {
-      return {
-        message:
-          "We couldn't log you in. Double-check your username and password, and Try again.",
-      };
+    export async function action({ request }: { request: Request }) {
+      const formData = await request.formData();
+      // console.log("Form Entries:", Array.from(formData.entries()));
+      console.log("Action of login called...");
+      
+    
+      // Convert FormData to an object
+      const userData = Object.fromEntries(formData);
+       
+      //Adding data to Firebase
+      try {
+        const inputUserName = userData.username;
+        const inputPassword = userData.password;
+    
+        if (inputUserName === "i" && inputPassword === "c") {
+          console.log("Sucesss, its him");
+          return redirect("/weather");
+        } else {
+          return {
+            message:
+              "We couldn't log you in. Double-check your username and password, and Try again.",
+          };
+        }
+      } catch (error) {
+        console.error("Something went wrong", error);
+        return new Response("Error uploading data", { status: 500 });
+      }
+      
     }
-  } catch (error) {
-    console.error("Something went wrong", error);
-    return new Response("Error uploading data", { status: 500 });
-  }
-}

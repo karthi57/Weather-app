@@ -1,135 +1,172 @@
-import { getDocs, limit, orderBy, serverTimestamp } from "firebase/firestore";
-import React from "react";
 import FavouriteCities from "~/componets/FavouriteCities";
-import WeatherCards from "~/componets/WeatherCards";
-import { db, collection, addDoc, getDoc, doc, query } from "~/componets/firebase";
+import getWeatherData from "~/db/database";
+//import WeatherCards from "~/componets/WeatherLists";
+import {
+  db,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "~/componets/firebase";
+import { useLoaderData, Form, Link } from "@remix-run/react";
 
+interface cityArr {
+  id: string;
+  city: string;
+}
+
+interface WeatherData {
+  id: string;
+  location: {
+    name: string;
+  };
+}
 
 export default function WeatherPage() {
+  const loaderData = useLoaderData<WeatherData[]>();
+
   return (
     <div>
       <h1 className="p-2 border-2 border-zinc-800 text-center">
         Hii Welcome to the weather App
       </h1>
-      <FavouriteCities />
-      <WeatherCards />
+      <div className="flex justify-between items-center p-16">
+        <div className="flex w-full items-center">
+          <FavouriteCities />
+          <div className=" border-2 border-blue-400 w-1/2">
+            <h1> hell here are your cities</h1>
+            {loaderData?.map((cityData) => (
+              <div key={cityData.id} className="flex justify-between ">
+                <h1 className="p-2 m-2 text-red-600 text-3xl">
+                  {cityData?.location?.name}
+                </h1>
+                <div>
+                  <button className="deleteButton p-2 m-2 rounded border-2 border-zinc-600 hover:bg-green-500">
+                    View more
+                  </button>
+
+                  <Form action={`${cityData.id}`} method="delete">
+                    <button className="deleteButton p-2 m-2 rounded border-2 border-zinc-600 hover:bg-red-500">
+                      Delete
+                    </button>
+                  </Form>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* <WeatherCards /> */}
+      </div>
     </div>
   );
 }
 
-type ActionData = string[];
-
 //------------------------< Action >----------------------------------------
 
 export async function action({ request }: { request: Request }) {
-  const formData = await request.formData();
-  // console.log("Form Entries : ", Array.from(formData.entries()));
+  //console.log("action of weather is called ; ");
 
-  const cities = Object.fromEntries(formData.entries());
-  //console.log("Form Entries : ", Object.fromEntries(formData));
-  
-  //Adding To firebase
-
-  let recentFavouriteCitiesID;
-
-  try{
-    const citiesRef = collection(db, `users/1/userCities`);
-  
-    const docRef = await addDoc(citiesRef,{
-      city1: cities.city1,
-      city2: cities.city2,
-      city3: cities.city3,
-      city4: cities.city4,
-      city5: cities.city5,
-      createdAt : serverTimestamp(),
-    })
-    console.log("Succesfully added to Fb with userID", docRef.id);
-   
-    recentFavouriteCitiesID = docRef.id
+  if (request.method !== "POST") {
+    return { error: "Unsupported method" };
   }
-    catch(e){
+
+  const formData = await request.formData();
+  const cities = Object.fromEntries(formData.entries());
+
+  //Adding To firebase
+ 
+    try {
+      const userCitiesRef = collection(db, `users/1/userCities`);
+      const querySnapshot = await getDocs(userCitiesRef);
+      let numberOfCitiesInFireBase = querySnapshot.size;
+
+      // Adding Max of 5 cities
+      if (numberOfCitiesInFireBase >= 5) {
+        return { message: "You can add only upto 5 cities" };
+      } 
+
+      await addDoc(userCitiesRef, {
+        city: cities.city,
+      });
+      console.log(`Succesfulyy added city ${cities.city} to FB `);
+      
+    } catch (e) {
       console.log("unable to add cities", e);
     }
-
-  return recentFavouriteCitiesID;
+  
+  return null;
 }
-
-
-//--------------------< Fetching ID of most recent Data >---------------------------------------------------------
-
-async function fetchingMostRecentCitiesID(){
-  try{
-    const citiesRef = collection(db, `users/1/userCities`);
-
-    const q = query(citiesRef, orderBy("createdAt", "desc"), limit(1));
-    const qSnapshot = await getDocs(q);
-
-    if(!qSnapshot.empty){
-      const recentFavouriteCities = qSnapshot.docs[0];
-
-    // Convert object values to an array
-       const cityArray = Object.values(recentFavouriteCities.data());
-      console.log("Recent city data", cityArray);
-
-    //removing TimeStamp from array
-      const newCityArray = cityArray.filter(city => typeof(city)==='string')
-      console.log("New city data", newCityArray);
-      return newCityArray;
-    }
-    else{
-      console.log("No user dta Found man!!!!")
-      return [];
-    }
-
-    // const docSnap = await getDoc(docCitiesRef);
-
-     // if (docSnap.exists()) {
-     //   const data = docSnap.data();
-     //   cityArray.push(data.city1, data.city2, data.city3, data.city4, data.city5);
-     // } else {
-     //   console.log("No cities found");
-     // }
-    
-   
-  }
-  catch(error){
-    console.log("Error fetching most recent cities:", error);
-    
-  }
-}
-
 
 //--------------------< Loader >---------------------------------------------------------
 
 export async function loader() {
   //getting data form firebase
-
+  console.log("action of loader is called ; ");
   //const cityArray = :['London', 'Bangalore', 'Kolkata', 'Tokyo', 'Ireland' ];
-  const cityArray = await fetchingMostRecentCitiesID();
+  const cityArray = await fetchingCitiesWithID();
 
-  console.log("after calling the function -Array is : ", cityArray);
-  // const data = await getWeatherData();
-
-  if(cityArray){
-    const AllFiveCityWeatherData = cityArray.map(async (city) => {
-      const multipleCityPromises = await getWeatherData(city);
-      return multipleCityPromises;
-    });
-    //console.log(AllFiveCityWeatherData); // its an ARRAY of PROMISES
-
-  const resolvedPromisesData = await Promise.all(AllFiveCityWeatherData);
-
-  //console.log(promisesReoslvedData);
-  return resolvedPromisesData;
+  if(!cityArray || cityArray.length === 0){
+    console.log("No cities found in FB");
+    return [];
+    
   }
-  return null
+
+  
+//fetching weather data for all city in parallel
+  
+    //const allExistingCityWeatherData = cityArray.map(async (city) => {
+    //   try {
+    //     const multipleCityPromises = await getWeatherData(city.city);
+    //     return { id: city.id, ...multipleCityPromises };
+    //   } catch (error) {
+    //     console.error(`Error fetching weather data for ${city.city}:`, error);
+    //     return { id: city.id, location: { name: city.city } }; // Fallback
+    //   }
+    // });
+     // its an ARRAY of PROMISES
+
+     try{
+      const weatherDataArray = await Promise.all(
+        cityArray.map(async (city) => {
+         try{
+          const weatherData = await getWeatherData(city.city);
+          return {id: city.id, ...weatherData};
+         }
+         catch(error){
+          console.error(`Error fetching weather data for ${city.city}:`, error);
+          return { id:city.id, location: { name: city.city }}
+         }
+        }
+      )
+    )
+    return weatherDataArray;
+  }
+    catch(error){
+      console.log("error in fetching weather data", error);
+    }
 }
 
-//----------------------< Getting data from API >---------------------------
-export async function getWeatherData(city: string) {
-  const weatherData = await fetch(
-    `http://api.weatherapi.com/v1/current.json?key=e30089b308f04c5080c94715241611&q="${city}&aqi=no`
-  ).then((response) => response.json());
-  return weatherData;
-}
 
+//--------------------< Fetching ID of most recent Data >---------------------------------------------------------
+export async function fetchingCitiesWithID(){
+  const userCitiesRef = collection(db, `users/1/userCities`);
+
+  try{
+    const querySnapshot = await getDocs(userCitiesRef);
+    // let cityArray:cityArr[] = [];
+    // querySnapshot.forEach((doc)=> {
+    //   //  console.log(doc.id, " => ", doc.data().city);
+    //   return( cityArray = [...cityArray, {id : doc.id, city: doc.data().city}]);
+    // })
+
+    const cityArray = querySnapshot.docs.map(doc =>{
+      return {id: doc.id, city: doc.data().city};
+    })
+    return cityArray;
+    }
+  catch(error){
+    console.log("Error fetching most recent cities:", error);
+    return [];
+  }
+}
