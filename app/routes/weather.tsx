@@ -6,8 +6,6 @@ import {
   collection,
   addDoc,
   getDocs,
-  deleteDoc,
-  doc,
 } from "~/componets/firebase";
 import { useLoaderData, Form, Link } from "@remix-run/react";
 
@@ -42,9 +40,13 @@ export default function WeatherPage() {
                   {cityData?.location?.name}
                 </h1>
                 <div>
-                  <button className="deleteButton p-2 m-2 rounded border-2 border-zinc-600 hover:bg-green-500">
-                    View more
-                  </button>
+                  <Link to={`/${cityData.id}`}>
+                    <button className="p-2 m-2 rounded border-2 border-zinc-600 hover:bg-green-500"
+                    onClick={() => console.log(`Navigating to city ID: ${cityData.id}`)}
+                    >
+                      View more
+                    </button>
+                  </Link>
 
                   <Form action={`${cityData.id}`} method="delete">
                     <button className="deleteButton p-2 m-2 rounded border-2 border-zinc-600 hover:bg-red-500">
@@ -62,7 +64,7 @@ export default function WeatherPage() {
   );
 }
 
-//------------------------< Action >----------------------------------------
+//------------------------------------< Action >----------------------------------------
 
 export async function action({ request }: { request: Request }) {
   //console.log("action of weather is called ; ");
@@ -102,7 +104,7 @@ export async function action({ request }: { request: Request }) {
 
 export async function loader() {
   //getting data form firebase
-  console.log("action of loader is called ; ");
+  //console.log("action of loader is called ; ");
   //const cityArray = :['London', 'Bangalore', 'Kolkata', 'Tokyo', 'Ireland' ];
   const cityArray = await fetchingCitiesWithID();
 
@@ -112,19 +114,6 @@ export async function loader() {
     
   }
 
-  
-//fetching weather data for all city in parallel
-  
-    //const allExistingCityWeatherData = cityArray.map(async (city) => {
-    //   try {
-    //     const multipleCityPromises = await getWeatherData(city.city);
-    //     return { id: city.id, ...multipleCityPromises };
-    //   } catch (error) {
-    //     console.error(`Error fetching weather data for ${city.city}:`, error);
-    //     return { id: city.id, location: { name: city.city } }; // Fallback
-    //   }
-    // });
-     // its an ARRAY of PROMISES
 
      try{
       const weatherDataArray = await Promise.all(
