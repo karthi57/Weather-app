@@ -1,13 +1,11 @@
 import FavouriteCities from "~/componets/FavouriteCities";
 import getWeatherData from "~/db/database";
+import { Outlet } from "@remix-run/react";
 //import WeatherCards from "~/componets/WeatherLists";
-import {
-  db,
-  collection,
-  addDoc,
-  getDocs,
-} from "~/componets/firebase";
-import { useLoaderData, Form, Link } from "@remix-run/react";
+import {db,collection,addDoc,getDocs, deleteDoc, doc} from "~/componets/firebase";
+import { useLoaderData, Form, Link, redirect } from "@remix-run/react";
+import { useState } from "react";
+import Modal from "~/componets/Modal";
 
 interface cityArr {
   id: string;
@@ -21,7 +19,26 @@ interface WeatherData {
   };
 }
 
+interface Params {
+  id?: string;
+}
+
 export default function WeatherPage() {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  //const [selectedCity, setSelectedCity] = useState<string | null>(null);
+
+
+  const openModal = () => {
+   // setSelectedCity(city);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    //setSelectedCity(null);
+  };
+
   const loaderData = useLoaderData<WeatherData[]>();
 
   return (
@@ -40,15 +57,15 @@ export default function WeatherPage() {
                   {cityData?.location?.name}
                 </h1>
                 <div>
-                  <Link to={`/${cityData.id}`}>
+                  <Link to={cityData.id}>
                     <button className="p-2 m-2 rounded border-2 border-zinc-600 hover:bg-green-500"
-                    onClick={() => console.log(`Navigating to city ID: ${cityData.id}`)}
                     >
                       View more
                     </button>
                   </Link>
 
-                  <Form action={`${cityData.id}`} method="delete">
+
+                  <Form  method="delete" action={`/weather/${cityData.id}`}>
                     <button className="deleteButton p-2 m-2 rounded border-2 border-zinc-600 hover:bg-red-500">
                       Delete
                     </button>
@@ -60,18 +77,16 @@ export default function WeatherPage() {
         </div>
         {/* <WeatherCards /> */}
       </div>
+      <Outlet/>
     </div>
   );
 }
 
 //------------------------------------< Action >----------------------------------------
 
-export async function action({ request }: { request: Request }) {
+export async function action({ request, params }: { request: Request; params : Params }) {
   //console.log("action of weather is called ; ");
 
-  if (request.method !== "POST") {
-    return { error: "Unsupported method" };
-  }
 
   const formData = await request.formData();
   const cities = Object.fromEntries(formData.entries());
@@ -81,12 +96,17 @@ export async function action({ request }: { request: Request }) {
     try {
       const userCitiesRef = collection(db, `users/1/userCities`);
       const querySnapshot = await getDocs(userCitiesRef);
-      let numberOfCitiesInFireBase = querySnapshot.size;
+      const numberOfCitiesInFireBase = querySnapshot.size;
+      //const weatherData = await getWeatherData(formData.get('city'));
 
       // Adding Max of 5 cities
-      if (numberOfCitiesInFireBase >= 5) {
+      if (numberOfCitiesInFireBase >= 25) {
         return { message: "You can add only upto 5 cities" };
       } 
+
+      // if(weatherData.error){
+      //   return { message : "Please enetr the valid City Name" }
+      // }
 
       await addDoc(userCitiesRef, {
         city: cities.city,
@@ -96,8 +116,8 @@ export async function action({ request }: { request: Request }) {
     } catch (e) {
       console.log("unable to add cities", e);
     }
-  
-  return null;
+  //return weatherdata
+  return " this is from weather.tsx null";
 }
 
 //--------------------< Loader >---------------------------------------------------------

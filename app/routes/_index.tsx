@@ -37,7 +37,7 @@ export default function Index() {
             id="userName"
             className="bg-white rounded p-2 w-[100%] text-black font-semibold"
             name="username"
-            required
+           
           />
         </p>
         <p className="m-2">
@@ -49,7 +49,7 @@ export default function Index() {
             id="password"
             className="bg-white rounded p-2 w-[100%] text-black font-semibold"
             name="password"
-            required
+            
           />
         </p>
         <button className="p-1 m-2  mt-4 bg-blue-400 hover:bg-blue-500 rounded">
@@ -69,7 +69,7 @@ export default function Index() {
     export async function action({ request }: { request: Request }) {
       const formData = await request.formData();
       // console.log("Form Entries:", Array.from(formData.entries()));
-      console.log("Action of login called...");
+      //console.log("Action of login called...");
       
     
       // Convert FormData to an object
@@ -83,7 +83,8 @@ export default function Index() {
         if (inputUserName === "i" && inputPassword === "c") {
           console.log("Sucesss, its him");
           return redirect("/weather");
-        } else {
+        } else
+        {
           return {
             message:
               "We couldn't log you in. Double-check your username and password, and Try again.",
@@ -93,5 +94,6 @@ export default function Index() {
         console.error("Something went wrong", error);
         return new Response("Error uploading data", { status: 500 });
       }
-      
+      return null;
     }
+
