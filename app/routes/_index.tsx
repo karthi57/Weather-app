@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Form,  useActionData } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
+import styles from '~/styles/cityInput.css'
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,18 +19,17 @@ export default function Index() {
 
   return (
     <div className="flex flex-col h-screen items-center justify-center">
-      <h1>LOGIN PAGE</h1>
+      <h1 className="font-bold m-4 text-2xl">LOGIN PAGE</h1>
       <Form
         method="post"
-        
-        className="border-2 border-white w-1/3 p-8 rounded flex flex-col justify-left items-left"
+        className=" small-form border-[0.05rem] border-neutral-950 w-1/3 p-8 rounded flex flex-col justify-left items-left"
       >
         {actionData?.message && (
           <p className="text-red-500">{actionData.message}</p>
         )}
 
         <p className="m-2">
-          <label htmlFor="username" className="mr-4">
+          <label htmlFor="username" className="mr-4 font-semibold">
             Username
           </label>
           <input
@@ -37,11 +37,12 @@ export default function Index() {
             id="userName"
             className="bg-white rounded p-2 w-[100%] text-black font-semibold"
             name="username"
+            placeholder="Enter the username"
            required
           />
         </p>
         <p className="m-2">
-          <label htmlFor="password" className="mr-4">
+          <label htmlFor="password" className="mr-4 font-semibold">
             Password
           </label>
           <input
@@ -49,12 +50,15 @@ export default function Index() {
             id="password"
             className="bg-white rounded p-2 w-[100%] text-black font-semibold"
             name="password"
+            placeholder="Enter the password"
             required
           />
         </p>
-        <button className="p-1 m-2  mt-4 bg-blue-400 hover:bg-blue-500 rounded">
-          Login
-        </button>
+        <div className="flex items-center justify-center">
+          <button className="btn-login p-1 m-2 mt-4 bg-neutral-950 border-[0.5px] border-blue-500 hover:bg-blue-500 rounded font-semibold w-1/3 text-center">
+            Login
+          </button>
+        </div>
       </Form>
     </div>
   );
@@ -94,3 +98,7 @@ export default function Index() {
       return null;
     }
 
+    export function links(){
+      return [{ rel: 'stylesheet', href : styles}]
+    }
+    

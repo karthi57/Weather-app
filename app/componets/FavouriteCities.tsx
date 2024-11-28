@@ -19,7 +19,7 @@ function FavouriteCities() {
 
   const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state ==="submitting";
+  const isSubmitting = navigation.state ==="idle";
   
 
   

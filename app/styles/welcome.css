@@ -1,17 +1,17 @@
 .sun svg {
-    position: absolute;
-    right:47.5%;
-    top:21%;
-    width: 100px;
-    height: 100px;
-  }
+  position: absolute;
+  right: 47.5%;
+  top: 21%;
+  width: 100px;
+  height: 100px;
+}
 
-  /* .switch:hover */.sun svg {
-    animation: rotate 15s linear infinite;
+/* .switch:hover */
+.sun svg {
+  animation: rotate 15s linear infinite;
 }
 
 @keyframes rotate {
- 
   0% {
     transform: rotate(0);
   }
@@ -19,4 +19,9 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.gradientText {
+  background-color: #8ec5fc;
+  background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 }
