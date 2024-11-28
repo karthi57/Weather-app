@@ -9,7 +9,7 @@
   
   .modal {
     position: fixed;
-    top: 25vh;
+    top: 15vh;
     width: 30rem;
     border-radius: 6px;
     border: none;
@@ -17,3 +17,10 @@
     animation: fade-slide-down 0.5s ease-out forwards;
   }
   
+  .dialogBox  {
+    box-shadow: rgba(135, 159, 255, 0.569) 3px 3px 6px 0px inset, rgba(29, 36, 245, 0.409) -3px -3px 6px 1px inset;
+  }
+
+  .back-btn{
+    box-shadow: rgba(201, 187, 194, 0.45) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  }

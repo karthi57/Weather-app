@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, useNavigation, useActionData } from "@remix-run/react";
-//import { fetchingCitiesWithID } from '~/routes/weather'
+import styles from '~/styles/cityInput.css'
 
 
 interface ActionData {
@@ -26,37 +26,42 @@ function FavouriteCities() {
   
   return (
     
-      <div className="w-1/2">
-        <h1 className="p-4">Please Enter 5 Favourite Cities</h1>
-        <Form
-          method="post"
-          className="border-2 m-4 border-white w-[90%] p-8 rounded flex flex-col justify-left items-left"
-        >
-            {actionData?.message && <p className="text-red-600 text-bold">{actionData.message}</p>}
-          <p className="p-2">
-            <label htmlFor='city' className="mr-4">
-              {" "}
-              City Name
-            </label>
-            <input
-              type="text"
-              id='city'
-              name="city"
-              className="cityNameInput bg-white rounded p-2 w-[100%] text-black font-semibold"
-              disabled = {isSubmitting}
-              placeholder="Enter the city Name"
-              
-              required
-            />
-          </p>
-          <button
-           className="p-1 m-2  mt-4 bg-blue-500 hover:bg-blue-400 rounded"
-           disabled = {isSubmitting}
-           >
-           {isSubmitting ? "Submiting..." : "Submit"}
-           
-          </button>
-        </Form>
+    <div className="form rounded w-1/3  h-[500px] p-8 bg-neutral-950">
+        <h1 className="p-4 font-semibold text-xl italic">Please Enter Your Favourite City</h1>
+        <div className="flex items-center justify-center">
+          <Form
+            method="post"
+            className="small-form border-[0.6px] m-2 border-neutral-400 w-[90%] p-8 rounded-md flex flex-col justify-left items-left "
+          >
+              {actionData?.message && <p className="text-red-600 text-bold">{actionData.message}</p>}
+            <p className="m-2">
+              <label htmlFor='city' className="mb-4">
+                {" "}
+                City Name
+              </label>
+             <div className="input-container">
+             <input
+                type="text"
+                id='city'
+                name="city"
+                disabled = {isSubmitting}
+                placeholder="Enter the city Name"
+          
+                required
+              />
+             </div>
+            </p>
+            <div className="flex items-center justify-center p-4">
+            <button
+              className="button text-center"
+             disabled = {isSubmitting}
+             >
+             {isSubmitting ? "Submiting..." : "Submit"}
+          
+            </button>
+            </div>
+          </Form>
+        </div>
       </div>
       
     
@@ -67,4 +72,6 @@ export default FavouriteCities;
 
 
 
-
+export function links(){
+  return [{ rel: 'stylesheet', href : styles}]
+}
