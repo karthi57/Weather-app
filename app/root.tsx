@@ -61,7 +61,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body className=" flex h-screen justify-center " >
-       <main className="error-box w-1/3  mt-24 p-12 text-center felx  border-red-500 ">
+       <main className="error-box w-1/3  mt-24 mb-20 p-12 text-center felx  border-red-500 ">
        <h1 className="text-3xl text-red-400 font-semibold m-2">Something Went Wrong...😟</h1>
         <p className="text-4xl text-red-500 font-semibold m-2">404</p>
        <h1 className="text-4xl text-red-500 font-bold m-2">Not Found</h1>
