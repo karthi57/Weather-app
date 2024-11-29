@@ -68,7 +68,7 @@ export default function Index() {
       const formData = await request.formData();
       //console.log("Action of login called...");
     
-      //--------< Convert FormData to an object >------------
+      //--------< Convert FormData to an object >--------------
       const userData = Object.fromEntries(formData);
        
       //--------< checking username and  password >------------

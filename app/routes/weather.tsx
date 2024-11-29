@@ -58,7 +58,7 @@ export async function action({request}: {request: Request}) {
     return weatherData.location.name;
   } catch (e) {
     console.log("unable to add cities", e);
-    return new Response("unable to add cities")
+    return '';
   }
 
 }
@@ -90,7 +90,7 @@ export async function fetchingCitiesWithID() {
     return cityArray;
 
   } catch (error) {
-    console.log("Error fetching most recent cities:", error);
+    console.log("Error fetching cities:", error);
     return [];
   }
 }
