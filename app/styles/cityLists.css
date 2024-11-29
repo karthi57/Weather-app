@@ -8,9 +8,13 @@
 }
 
 .btn-del{
+  border: 1px;
+  border-radius: 0.25rem;
   box-shadow: rgba(239, 160, 192, 0.479) 3px 3px 6px 0px inset, rgba(250, 1, 1, 0.5) -3px -3px 6px 1px inset;
 }
 
 .btn-view{
+  border: 1px;
+  border-radius: 0.25rem;
   box-shadow: rgba(177, 243, 183, 0.461) 3px 3px 6px 0px inset, rgba(7, 247, 3, 0.349) -3px -3px 6px 1px inset;
 }

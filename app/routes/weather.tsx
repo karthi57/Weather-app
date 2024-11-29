@@ -1,13 +1,7 @@
 import { MetaFunction } from "@remix-run/node";
-import getWeatherData from "~/API/index";
 import { Outlet } from "@remix-run/react";
-import {
-  db,
-  collection,
-  addDoc,
-  getDocs,
-} from "~/componets/firebase";
-import { useLoaderData} from "@remix-run/react";
+import { db, collection, addDoc, getDocs } from "~/componets/firebase";
+import getWeatherData from "~/API/index";
 import Welcome from "~/componets/Welcome";
 
 export const meta: MetaFunction = () => {
@@ -17,22 +11,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-interface cityArr {
-  id: string;
-  city: string;
-}
-
-interface WeatherData {
-  id: string;
-  city: string;
-}
-
-interface Params {
-  id?: string;
-}
-
 export default function WeatherPage() {
-  const loaderData = useLoaderData<WeatherData[]>();
 
   return (
     <>
@@ -51,53 +30,43 @@ export default function WeatherPage() {
 
 //------------------------------------< Action >----------------------------------------
 
-export async function action({
-  request,
-  params,
-}: {
-  request: Request;
-  params: Params;
-}) {
+export async function action({request}: {request: Request}) {
   //console.log("action of weather is called ; ");
 
   const formData = await request.formData();
   const cities = Object.fromEntries(formData.entries());
 
-  //Adding To firebase
-
+  //-------------< Adding City To firebase >------------------------
   try {
     const userCitiesRef = collection(db, `users/1/userCities`);
     const querySnapshot = await getDocs(userCitiesRef);
     const numberOfCitiesInFireBase = querySnapshot.size;
     const weatherData = await getWeatherData(formData.get("city"));
 
-    // Adding Max of 5 cities
+    //----------< Adding Max of 5 cities >---------------------
     if (numberOfCitiesInFireBase >=5) {
       return { message: "You can add only upto 5 cities" };
     }
 
+    //----------< Wrong City Input >---------------------------
     if (weatherData.error) {
       return { message: "Please enetr the valid City Name" };
     }
 
-    await addDoc(userCitiesRef, {
-      city: weatherData.location.name,
-    });
-    document.getElementById('city-list')?.scrollIntoView({behavior:"smooth"});
+    await addDoc(userCitiesRef, {city: weatherData.location.name,});
     console.log(`Succesfulyy added city ${weatherData.location.name} to FB `);
     return weatherData.location.name;
   } catch (e) {
     console.log("unable to add cities", e);
+    return new Response("unable to add cities")
   }
-  //return weatherdata
-  return " this is from weather.tsx null";
+
 }
 
 //--------------------< Loader >---------------------------------------------------------
 
 export async function loader() {
-  //getting data form firebase
-  //console.log("action of loader is called ; ");
+  //----------< getting data form firebase >---------------------------
   //const cityArray = :['London', 'Bangalore', 'Kolkata', 'Tokyo', 'Ireland' ];
   const cityArray = await fetchingCitiesWithID();
 
@@ -105,47 +74,21 @@ export async function loader() {
     console.log("No cities found in FB");
     return [];
   }
-  //console.log("city Array => ", cityArray);
-
-  //    try{
-  //     const weatherDataArray = await Promise.all(
-  //       cityArray.map(async (city) => {
-  //        try{
-  //         const weatherData = await getWeatherData(city.city);
-  //         return {id: city.id, ...weatherData};
-  //        }
-  //        catch(error){
-  //         console.error(`Error fetching weather data for ${city.city}:`, error);
-  //         return { id:city.id, location: { name: city.city }}
-  //        }
-  //       }
-  //     )
-  //   )
-  //   return weatherDataArray;
-  // }
-  //   catch(error){
-  //     console.log("error in fetching weather data", error);
-  //   }
-
   return cityArray;
 }
 
-//--------------------< Fetching ID of most recent Data >---------------------------------------------------------
+//--------------------< Fetching cities and Id >---------------------------------------------------------
 export async function fetchingCitiesWithID() {
   const userCitiesRef = collection(db, `users/1/userCities`);
-
   try {
+    //---------< getting all docs from firebase >---------
     const querySnapshot = await getDocs(userCitiesRef);
-    // let cityArray:cityArr[] = [];
-    // querySnapshot.forEach((doc)=> {
-    //   //  console.log(doc.id, " => ", doc.data().city);
-    //   return( cityArray = [...cityArray, {id : doc.id, city: doc.data().city}]);
-    // })
 
     const cityArray = querySnapshot.docs.map((doc) => {
       return { id: doc.id, city: doc.data().city };
     });
     return cityArray;
+
   } catch (error) {
     console.log("Error fetching most recent cities:", error);
     return [];
