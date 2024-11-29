@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styles from '~/styles/modal.css'
+import  '~/styles/modal.css'
 
 type ModalProps = {
 children : ReactNode,
@@ -24,6 +24,4 @@ function Modal({ children, onClose }: ModalProps) {
   export default Modal;
 
 
-  export function links(){
-    return [{rel: 'stylesheet', href:styles}]
-  }
+  

@@ -2,6 +2,7 @@ import { redirect, useActionData,useNavigate, Link, useLoaderData  } from "@remi
 import { db, deleteDoc,doc, getDoc} from "~/componets/firebase";
 import getWeatherData from "~/API/index";
 import Modal from "~/componets/Modal";
+import { MetaFunction } from "@remix-run/node";
 
 
 
@@ -30,9 +31,8 @@ interface Weather{
 function card() {
 
   const navigate = useNavigate();
-  const actionData = useActionData<Weather[]>();
   const loaderData = useLoaderData<Weather>();
-  console.log("loader Data => ", loaderData);
+  //console.log("loader Data => ", loaderData);
   
 
   function closeHandler() {
@@ -100,7 +100,7 @@ export async function action({ request, params }: { request: Request; params : P
 //------------------------------------< Loader >------------------------------------------------
 
 
-export async function loader({ request, params }: { request: Request; params : Params }){
+export async function loader({ params }: { params : Params }){
   
     //console.log("Method type from /weather/id.jsx  action2 view more function => ",request.method);
       if(params.id){
@@ -110,12 +110,25 @@ export async function loader({ request, params }: { request: Request; params : P
           if (citySnap.exists()) {
              // console.log(citySnap.data());
               
-              const cityData = await getWeatherData(citySnap.data().city);
+              const cityData:Weather = await getWeatherData(citySnap.data().city);
               //console.log("citydata => ",cityData);
               return cityData;
           }
       }
-      return 'hii there how are you, u got this honey...';
+      throw new Response("City not found", { status: 404 });
   }
 
+  interface City{
+    location : {
+      name : string;
+    }
+  }
 
+//--------------------------< meat details >-------------------------------------
+//Dought
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Weather App" },
+    { name: "description", content: "Welcome to the Weather app!" },
+  ];
+};

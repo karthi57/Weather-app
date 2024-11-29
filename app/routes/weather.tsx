@@ -1,4 +1,4 @@
-import FavouriteCities from "~/componets/FavouriteCities";
+import { MetaFunction } from "@remix-run/node";
 import getWeatherData from "~/API/index";
 import { Outlet } from "@remix-run/react";
 import {
@@ -6,12 +6,16 @@ import {
   collection,
   addDoc,
   getDocs,
-  deleteDoc,
-  doc,
 } from "~/componets/firebase";
-import { useLoaderData, Form, Link, redirect } from "@remix-run/react";
+import { useLoaderData} from "@remix-run/react";
 import Welcome from "~/componets/Welcome";
-import CityLists from "~/componets/CityLists";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Weather App" },
+    { name: "description", content: "Welcome to the Weather app!" },
+  ];
+};
 
 interface cityArr {
   id: string;
@@ -29,7 +33,6 @@ interface Params {
 
 export default function WeatherPage() {
   const loaderData = useLoaderData<WeatherData[]>();
-  //console.log("city Array as loaderData = useLoaderData() => ", loaderData);
 
   return (
     <>

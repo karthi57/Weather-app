@@ -1,6 +1,6 @@
-import React from 'react'
-import { useLoaderData, Form, Link, redirect } from "@remix-run/react";
-import styles from '~/styles/cityLists.css'
+
+import { useLoaderData, Form, Link } from "@remix-run/react";
+import  "~/styles/cityLists.css"
 
 
 interface WeatherData {
@@ -46,7 +46,4 @@ function CityLists() {
 export default CityLists
 
 
-export function links(){
-    return [{ rel: 'stylesheet', href : styles}]
-  }
   

@@ -1,12 +1,12 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Form,  useActionData } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
-import styles from '~/styles/cityInput.css'
+import  '~/styles/cityInput.css'
 
 export const meta: MetaFunction = () => {
   return [
     { title: "Weather App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { name: "description", content: "Welcome to the Weather app!" },
   ];
 };
 
@@ -84,7 +84,7 @@ export default function Index() {
         const inputUserName = userData.username;
         const inputPassword = userData.password;
     
-        if (inputUserName === "i" && inputPassword === "c") {
+        if (inputUserName === "ipgautomotive" && inputPassword === "carmaker") {
           console.log("SuccessFully Logged in, its ipgautomotive ");
           return redirect("/weather");
         } else
@@ -98,7 +98,4 @@ export default function Index() {
       return null;
     }
 
-    export function links(){
-      return [{ rel: 'stylesheet', href : styles}]
-    }
-    
+   
