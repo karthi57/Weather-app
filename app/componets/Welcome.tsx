@@ -1,10 +1,13 @@
-import FavouriteCities from './FavouriteCities'
+import CityInput from './CityInput'
 import CityLists from './CityLists'
 import  "~/styles/welcome.css"
 
 function Welcome() {
   return (
-   <div className='p-4 m-8  flex flex-col items-center justify-center'>
+   <div className='p-4 m-2  flex flex-col items-center justify-center'>
+    <img src="ipg.png" alt="ipg logo"
+      className='self-start mb-[-1%] h-8'
+    />
      <h1 className='text-3xl text-white mb-4'>Welcome to the weather app <span className='gradientText font-semibold text-transparent bg-clip-text '> ipgautomotive</span></h1>
 
       {/*-----------< sun svg >------------*/}
@@ -16,7 +19,7 @@ function Welcome() {
 
 
       <div className='flex gap-12 w-full items-center justify-center'>
-        <FavouriteCities/>
+        <CityInput/>
         <CityLists/>
       </div>
 

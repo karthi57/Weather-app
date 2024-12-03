@@ -15,7 +15,7 @@ interface ActionData {
   message: "string";
 }
 
-export default function Index() {
+export default function LoginPage() {
   const actionData = useActionData<ActionData>();
 
   return (
@@ -64,12 +64,13 @@ export default function Index() {
    The function parameter is an object with a request property. The request property is of type Request.
  */
 
-    export async function action({ request }: { request: Request }) {
+    export async function action({ request } : { request: Request }) {
       const formData = await request.formData();
-      //console.log("Action of login called...");
-    
-      //--------< Convert FormData to an object >--------------
+      console.log("Action of login called...", formData);
+      
+      //--------< Extracting the form input data  >-------------
       const userData = Object.fromEntries(formData);
+      console.log("userData from Login Form",userData);
        
       //--------< checking username and  password >------------
         const inputUserName = userData.username;

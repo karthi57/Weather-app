@@ -6,15 +6,10 @@ interface ActionData {
   message?: string;
 }
 
-interface cityArr {
-  id: string;
-  city: string;
-}
-
-function FavouriteCities() {
+function CityInput() {
   const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const isSubmitting = navigation.state === 'submitting'
 
   return (
     <div className="form rounded w-1/3 h-[500px] p-8 bg-neutral-950">
@@ -32,7 +27,7 @@ function FavouriteCities() {
 
           <div className="flex items-center justify-center p-4">
             <button className="button text-center" disabled={isSubmitting}>
-              {isSubmitting ? "Submiting..." : "Submit"}
+              Submit
             </button>
           </div>
           
@@ -42,6 +37,6 @@ function FavouriteCities() {
   );
 }
 
-export default FavouriteCities;
+export default CityInput;
 
 

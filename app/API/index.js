@@ -1,14 +1,6 @@
 
-//----------------------< Getting data from API >---------------------------
+//----------------------< Getting data from Weather API >---------------------------
 export default async function getWeatherData(city) {
-
-      // const cacheKey = `weather_${city}`;
-      // const cachedData = localStorage.getItem(cacheKey);
-
-      // if(cachedData){
-      //   console.log(`Fetching the cahced data for the city ${city}`);
-      //   return JSON.parse(cachedData);
-      // }
 
       //calling API
       try{
@@ -22,11 +14,6 @@ export default async function getWeatherData(city) {
         console.log("ERROR MESSAGE FROM API", weatherData.error.message);
         return null;
       }
-
-        // // stroring in cache
-        // localStorage.setItem(cacheKey, JSON.stringify(weatherData));
-        // console.log(`Fetched data from API and stroed in cache for city : ${city}`);
-       
        
       }
       catch(error){
@@ -34,4 +21,5 @@ export default async function getWeatherData(city) {
         throw error;
       }
   }
+
 
