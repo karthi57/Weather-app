@@ -1,56 +1,56 @@
-/* From Uiverse.io by coslac */ 
+/* From Uiverse.io by coslac */
 /* From Uiverse.io by Smit-Prajapati */
 .input-container {
-    display: flex;
-    background: white;
-    border-radius: 0.9rem;
-    background: linear-gradient(173deg, #23272f 0%, #14161a 100%);
-    box-shadow:
-      10px 10px 20px #0e1013,
-      -5px -5px 40px #383e4bc5;
-    padding: 0.12rem;
-    gap: 0.3rem;
-  }
-  
-  .input-container input {
-    border-radius: 0.7rem;
-    background: #23272f;
-    box-shadow:
-      inset 5px 5px 10px #0e1013,
-      inset -5px -5px 10px #383e4beb,
-      0px 0px 100px rgba(255, 212, 59, 0),
-      0px 0px 100px rgba(255, 102, 0, 0);
-    width: 100%;
-    flex-basis: 100%;
-    padding: 1rem;
-    border: none;
-    border: 1px solid transparent;
-    color: white;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .input-container input:focus {
-    border: 1px solid #ffd43b;
-    outline: none;
-    box-shadow:
-      inset 0px 0px 10px rgba(255, 102, 0, 0.5),
-      inset 0px 0px 10px rgba(255, 212, 59, 0.5),
-      0px 0px 100px rgba(255, 212, 59, 0.5),
-      0px 0px 100px rgba(255, 102, 0, 0.5);
-  }
-  
-  @media (max-width: 500px) {
-    .input-container {
-      flex-direction: column;
-    }
-  
-    .input-container input {
-      border-radius: 0.8rem;
-    }
-  }
-  
+  display: flex;
+  background: white;
+  border-radius: 0.9rem;
+  background: linear-gradient(173deg, #23272f 0%, #14161a 100%);
+  box-shadow:
+    10px 10px 20px #0e1013,
+    -5px -5px 40px #383e4bc5;
+  padding: 0.12rem;
+  gap: 0.3rem;
+}
 
-  /* submit button */ 
+.input-container input {
+  border-radius: 0.7rem;
+  background: #23272f;
+  box-shadow:
+    inset 5px 5px 10px #0e1013,
+    inset -5px -5px 10px #383e4beb,
+    0px 0px 100px rgba(255, 212, 59, 0),
+    0px 0px 100px rgba(255, 102, 0, 0);
+  width: 100%;
+  flex-basis: 100%;
+  padding: 1rem;
+  border: none;
+  border: 1px solid transparent;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-container input:focus {
+  border: 1px solid #ffd43b;
+  outline: none;
+  box-shadow:
+    inset 0px 0px 10px rgba(255, 102, 0, 0.5),
+    inset 0px 0px 10px rgba(255, 212, 59, 0.5),
+    0px 0px 100px rgba(255, 212, 59, 0.5),
+    0px 0px 100px rgba(255, 102, 0, 0.5);
+}
+
+@media (max-width: 500px) {
+  .input-container {
+    flex-direction: column;
+  }
+
+  .input-container input {
+    border-radius: 0.8rem;
+  }
+}
+
+
+/* submit button */
 .button {
   background-color: #ffffff00;
   color: #fff;
@@ -77,12 +77,10 @@
   box-shadow: rgba(104, 94, 238, 0.608) 0px 2px 5px -1px, rgba(104, 94, 238, 0.608)0px 1px 3px -1px;
 }
 
-.small-form{
+.small-form {
   box-shadow: rgb(45, 48, 52) 4px 4px 6px 0px inset, rgba(0, 0, 0, 0.5) -5px -5px 6px 1px inset;
 }
 
-.btn-login{
+.btn-login {
   box-shadow: rgba(135, 159, 255, 0.569) 3px 3px 6px 0px inset, rgba(23, 31, 246, 0.478) -3px -3px 6px 1px inset;
 }
-  
-  

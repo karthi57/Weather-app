@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getFirestore, addDoc,getDoc, getDocs,doc, collection, deleteDoc } from "firebase/firestore";
+import { getFirestore, addDoc, getDoc, getDocs, doc, collection, deleteDoc } from "firebase/firestore";
 
 
 // Your web app's Firebase configuration

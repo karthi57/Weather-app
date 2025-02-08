@@ -7,7 +7,7 @@ import {
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 import { useRouteError } from "@remix-run/react";
-import "~/styles/cityLists.css"
+import "~/styles/cityLists.css";
 
 import "./tailwind.css";
 
@@ -20,7 +20,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href:"https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    href: "https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap",
   },
 ];
 
@@ -42,37 +42,37 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-
 export default function App() {
   return <Outlet />;
 }
 
-
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.error("error from root => ",error);
-    // Checking if the error is an object of Error Class or not 
-    const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+  console.error("error from root => ", error);
+  // Checking if the error is an object of Error Class or not
+  const errorMessage =
+    error instanceof Error ? error.message : JSON.stringify(error);
   return (
     <html>
-
       <head>
         <title>Oh no!</title>
         <Meta />
         <Links />
       </head>
 
-      <body className=" flex h-screen justify-center " >
-       <main className="error-box w-1/3  mt-24 mb-20 p-12 text-center felx  border-red-500 ">
-          <h1 className="text-3xl text-red-400 font-semibold m-2">Something Went Wrong...😟</h1>
+      <body className=" flex h-screen justify-center ">
+        <main className="error-box w-1/3  mt-24 mb-20 p-12 text-center felx  border-red-500 ">
+          <h1 className="text-3xl text-red-400 font-semibold m-2">
+            Something Went Wrong...😟
+          </h1>
           <h1 className="text-4xl text-red-500 font-semibold m-2">404</h1>
           <h1 className="text-4xl text-red-500 font-bold m-2">Not Found</h1>
-          <h1 className="text-xl text-red-400 font-bold m-2 capitalize max-w-[30%] p-2">{errorMessage}</h1>
-       </main>
+          <h1 className="text-xl text-red-400 font-bold m-2 capitalize max-w-[30%] p-2">
+            {errorMessage}
+          </h1>
+        </main>
         <Scripts />
       </body>
-
     </html>
   );
 }
-

@@ -1,5 +1,11 @@
 import { MetaFunction } from "@remix-run/node";
-import { Outlet, redirect, useRouteError, isRouteErrorResponse, useNavigate   } from "@remix-run/react";
+import {
+  Outlet,
+  redirect,
+  useRouteError,
+  isRouteErrorResponse,
+  useNavigate,
+} from "@remix-run/react";
 import { db, collection, addDoc, getDocs } from "~/componets/firebase";
 import getWeatherData from "~/API/index";
 import Welcome from "~/componets/Welcome";
@@ -13,7 +19,6 @@ export const meta: MetaFunction = () => {
 };
 
 export default function WeatherPage() {
-
   return (
     <>
       <div className="absolute top-0 z-[-2]  w-full bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
@@ -25,7 +30,6 @@ export default function WeatherPage() {
 
         <Welcome />
         <Outlet />
-
       </div>
     </>
   );
@@ -33,7 +37,7 @@ export default function WeatherPage() {
 
 //------------------------< action funcion; to get form data >----------------------------------------
 
-export async function action({request}: {request: Request}) {
+export async function action({ request }: { request: Request }) {
   //console.log("action of weather is called ; ");
 
   const formData = await request.formData();
@@ -48,7 +52,7 @@ export async function action({request}: {request: Request}) {
     const weatherData = await getWeatherData(formData.get("city"));
 
     //----------< Adding Max of 5 cities >------------------
-    if (numberOfCitiesInFireBase >=5) {
+    if (numberOfCitiesInFireBase >= 5) {
       return { message: "You can add only upto 5 cities" };
     }
 
@@ -56,64 +60,62 @@ export async function action({request}: {request: Request}) {
     if (weatherData.error) {
       return { message: "Please enetr the valid City Name" };
     }
-    
 
-    await addDoc(userCitiesRef, {city: weatherData.location.name,});
+    await addDoc(userCitiesRef, { city: weatherData.location.name });
     console.log(`Succesfulyy added city ${weatherData.location.name} to FB `);
     return redirect("/weather");
   } catch (e) {
     console.log("unable to add cities", e);
-    throw new Response("Unable to add cities,", {status : 500});
+    throw new Response("Unable to add cities,", { status: 500 });
   }
-
 }
-
 
 //--------------------< Loader  Function>---------------------------------------------------------
 
 export async function loader() {
-
   //const cityArray = ['London', 'Bangalore', 'Kolkata', 'Tokyo', 'Paris' ];
-  
+
   //------------------< getting data form firebase >-----------------
   const userCitiesRef = collection(db, `users/1/userCities`);
 
   try {
     //-------------< getting all docs from firebase >-----------------
     const querySnapshot = await getDocs(userCitiesRef);
-    
+
     const cityArray = querySnapshot.docs.map((doc) => {
       return { id: doc.id, city: doc.data().city };
     });
     return cityArray;
-
   } catch (error) {
     console.log("Error fetching cities:", error);
-    throw new Response("Unable to fetch the cities", {status : 500});
+    throw new Response("Unable to fetch the cities", { status: 500 });
   }
 }
 
-
 //----------------------------< Error handling >------------------------------------------------
 
-interface Errors{
+interface Errors {
   status: number;
   data: string;
 }
 
 //------------------< Catch Boundary >-------------------
-function CatchBoundary({ error } : {error : Errors}) {
+function CatchBoundary({ error }: { error: Errors }) {
   const navigate = useNavigate();
   function closeHandler() {
-    navigate('/weather');
+    navigate("/weather");
   }
 
   return (
     <Modal onClose={closeHandler}>
       <main className="error-box absolute z-10 w-full  mt-24 mb-20 p-12 text-center felx  border-red-500 ">
-    <h1 className="text-4xl text-red-500 font-semibold m-2">{error.status}</h1>
-    <h1 className="text-xl text-red-400 font-bold m-2 capitalize p-2">{error.data}</h1>
- </main>
+        <h1 className="text-4xl text-red-500 font-semibold m-2">
+          {error.status}
+        </h1>
+        <h1 className="text-xl text-red-400 font-bold m-2 capitalize p-2">
+          {error.data}
+        </h1>
+      </main>
     </Modal>
   );
 }
@@ -128,16 +130,22 @@ export function ErrorBoundary() {
 
   const navigate = useNavigate();
   function closeHandler() {
-    navigate('/weather');
+    navigate("/weather");
   }
- 
+
   return (
     <Modal onClose={closeHandler}>
       <main className="error-box absolute z-10 w-full  mt-24 mb-20 p-12 text-center felx  border-red-500 ">
-        <h1 className="text-3xl text-red-400 font-semibold m-2">Something Went Wrong...😟</h1>
-        <h1 className="text-4xl text-red-500 font-semibold m-2">{error.status}</h1>
-        <h1 className="text-xl text-red-400 font-bold m-2 capitalize p-2">{error.data}</h1>
-     </main>
+        <h1 className="text-3xl text-red-400 font-semibold m-2">
+          Something Went Wrong...😟
+        </h1>
+        <h1 className="text-4xl text-red-500 font-semibold m-2">
+          {error.status}
+        </h1>
+        <h1 className="text-xl text-red-400 font-bold m-2 capitalize p-2">
+          {error.data}
+        </h1>
+      </main>
     </Modal>
   );
 }
